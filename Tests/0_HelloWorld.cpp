@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-TEST(MYTEST0, A)
+TEST(HELLOWORLD, INIT)
 {
 
 }

@@ -1,4 +1,4 @@
-set(TARGET_NAME "RHI")
+set(TARGET_NAME "Common")
 get_filename_component(PARENT_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 get_filename_component(NAMESPACE ${PARENT_DIR} NAME)
 
@@ -12,21 +12,27 @@ file(GLOB_RECURSE CU_FILES "*.cu")
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${HPP_FILES} ${CPP_FILES} ${CC_FILES} ${CU_FILES})
 
+if(${NAMESPACE}_${TARGET_NAME}_SHARED)
+add_library(${TARGET_NAME} SHARED ${HEADER_FILES} ${HPP_FILES} ${CPP_FILES} ${CC_FILES} ${CU_FILES})
+target_compile_definitions(${TARGET_NAME} PUBLIC ${TARGET_NAME}_DLL_LIB)
+target_compile_definitions(${TARGET_NAME} PRIVATE ${TARGET_NAME}_DLL_LIB_EXPORT)
+else()
 add_library(${TARGET_NAME} STATIC ${HEADER_FILES} ${HPP_FILES} ${CPP_FILES} ${CC_FILES} ${CU_FILES})
+endif()
+
 
 add_library(${NAMESPACE}::${TARGET_NAME} ALIAS ${TARGET_NAME})
 
-set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 20)
+set_target_properties(${TARGET_NAME} PROPERTIES CXX_STANDARD 17)
 set_target_properties(${TARGET_NAME} PROPERTIES FOLDER Modules/${NAMESPACE})
 
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX->")
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
-find_package(Vulkan REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 # Link dependencies    
 target_link_libraries(${TARGET_NAME} PUBLIC
-VoidBrush::Common
-Vulkan::Vulkan
+spdlog::spdlog
           )
 
 target_include_directories(
