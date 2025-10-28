@@ -1,6 +1,4 @@
-set(TARGET_NAME "TEST")
-
-
+set(TARGET_NAME "TESTCASE")
 
 find_package(GTest CONFIG REQUIRED)
 
@@ -23,6 +21,7 @@ target_link_libraries(${TARGET_NAME}
 target_include_directories(
   ${TARGET_NAME} 
   PUBLIC 
+  VoidBrush::RHI
 )
 
 add_test(

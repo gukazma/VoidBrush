@@ -1,4 +1,4 @@
-set(TARGET_NAME "LibEx")
+set(TARGET_NAME "RHI")
 get_filename_component(PARENT_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 get_filename_component(NAMESPACE ${PARENT_DIR} NAME)
 
